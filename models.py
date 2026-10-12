@@ -5,7 +5,7 @@ from utils import Utils
 
 
 class Entity(ABC):
-    """Базовый абстрактный класс для всех сущностей программы"""
+    """Абстрактный класс, от него наследуются все классы программы"""
 
     @abstractmethod
     def info(self):
@@ -13,7 +13,6 @@ class Entity(ABC):
 
 
 class Car(Entity):
-
     def __init__(self, brand, model, year, number, mileage):
         self.brand = brand
         self.model = model
@@ -94,7 +93,7 @@ class Car(Entity):
 
 
 class ServiceRecord(Entity):
-    """Запись в журнале обслуживания. Объекты создаются только у наследников"""
+    """Общий класс для записей (заправка, ремонт, замена масла)"""
 
     def __init__(self, car, record_date, mileage, comment=""):
         self.car = car
@@ -163,7 +162,7 @@ class ServiceRecord(Entity):
     def __eq__(self, other):
         return isinstance(other, ServiceRecord) and self._key() == other._key()
 
-    # записи сравниваются по дате, а при одинаковой дате по пробегу
+    # сначала по дате, потом по пробегу
     def __lt__(self, other):
         return (self.date, self.mileage) < (other.date, other.mileage)
 
@@ -227,12 +226,10 @@ class Refuel(ServiceRecord):
         return f"{self.fuel}, {liters} л по {Utils.money(self.price)}"
 
     def __repr__(self):
-        return (f"Refuel({self.car.number!r}, {self.date!r}, {self.mileage}, "
-                f"{self.fuel!r}, {self.liters}, {self.price})")
+        return f"Refuel('{self.car.number}', '{self.date}', {self.mileage}, '{self.fuel}', {self.liters}, {self.price})"
 
 
 class Repair(ServiceRecord):
-
     def __init__(self, car, record_date, mileage, work, service, price, comment=""):
         super().__init__(car, record_date, mileage, comment)
         self.work = work
@@ -279,12 +276,10 @@ class Repair(ServiceRecord):
         return f"{self.work}, {self.service}"
 
     def __repr__(self):
-        return (f"Repair({self.car.number!r}, {self.date!r}, {self.mileage}, "
-                f"{self.work!r}, {self.service!r}, {self.price})")
+        return f"Repair('{self.car.number}', '{self.date}', {self.mileage}, '{self.work}', {self.price})"
 
 
 class OilChange(ServiceRecord):
-
     def __init__(self, car, record_date, mileage, oil, volume, price, interval=10000, comment=""):
         super().__init__(car, record_date, mileage, comment)
         self.oil = oil
@@ -346,12 +341,10 @@ class OilChange(ServiceRecord):
         return f"{self.oil}, {volume} л, следующая на {Utils.km(self.next_change())}"
 
     def __repr__(self):
-        return (f"OilChange({self.car.number!r}, {self.date!r}, {self.mileage}, "
-                f"{self.oil!r}, {self.volume}, {self.price}, {self.interval})")
+        return f"OilChange('{self.car.number}', '{self.date}', {self.mileage}, '{self.oil}', {self.price})"
 
 
 class User(Entity):
-
     def __init__(self, login, password, name):
         self.login = login
         self.password = password

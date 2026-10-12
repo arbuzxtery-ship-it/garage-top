@@ -4,8 +4,6 @@ from PySide6.QtGui import QColor, QPalette
 
 
 class Style:
-    """Тёмная тема для всего приложения"""
-
     ACCENT = "#3d7be0"
 
     QSS = """
@@ -89,6 +87,5 @@ class Style:
         palette.setColor(QPalette.Disabled, QPalette.ButtonText, QColor("#777777"))
         app.setPalette(palette)
 
-        # путь к картинке стрелки для выпадающих списков
-        arrow = Path(__file__).parent / "arrow.svg"
+        arrow = Path(__file__).parent / "images" / "arrow.svg"
         app.setStyleSheet(Style.QSS.replace("ARROW_PATH", arrow.as_posix()))

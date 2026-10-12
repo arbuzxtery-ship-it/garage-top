@@ -6,8 +6,6 @@ TIME_FORMAT = "%d.%m.%Y %H:%M:%S"
 
 
 class Session(Entity):
-    """Один вход пользователя в программу"""
-
     def __init__(self, login):
         self.login = login
         self._time_in = datetime.now()
@@ -66,15 +64,13 @@ class Session(Entity):
         return hash((self.login, self.time_in))
 
     def __repr__(self):
-        return f"Session('{self.login}', {self.time_in!r})"
+        return f"Session('{self.login}', '{self.time_in}')"
 
     def __str__(self):
         return " | ".join(self.to_row())
 
 
 class Report(Entity):
-    """Отчёт о работе программы, сохраняется в файл при закрытии"""
-
     HEADER = ["login", "time_in", "time_out"]
 
     def __init__(self, filename):
@@ -94,7 +90,7 @@ class Report(Entity):
 
     @staticmethod
     def make_table(rows):
-        # ширина каждой колонки по самому длинному значению
+        # ширина колонки = самое длинное значение в ней
         widths = []
         for i in range(len(Report.HEADER)):
             column = [Report.HEADER[i]] + [row[i] for row in rows]

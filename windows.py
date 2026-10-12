@@ -15,7 +15,6 @@ RECORD_TYPES = ["Заправка", "Ремонт", "Замена масла"]
 
 
 class LoginWindow(QDialog):
-
     def __init__(self, users):
         super().__init__()
         self.users = users
@@ -70,8 +69,6 @@ class LoginWindow(QDialog):
 
 
 class RecordDialog(QDialog):
-    """Окно добавления и изменения записи"""
-
     def __init__(self, car, record=None, parent=None):
         super().__init__(parent)
         self.car = car
@@ -145,7 +142,7 @@ class RecordDialog(QDialog):
         self.update_fields()
 
     def update_fields(self):
-        """Показывает только поля, которые нужны для выбранного типа"""
+        # показываем только поля для выбранного типа записи
         record_type = self.type_box.currentText()
         refuel = record_type == "Заправка"
         repair = record_type == "Ремонт"
@@ -187,7 +184,6 @@ class RecordDialog(QDialog):
         mileage = int(self.mileage_edit.value())
         comment = self.comment_edit.text()
 
-        # если что-то введено неправильно, сеттер выбросит ValueError
         try:
             if record_type == "Заправка":
                 self.record = Refuel(self.car, record_date, mileage, self.fuel_box.currentText(),
@@ -218,7 +214,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Журнал обслуживания автомобиля")
         self.resize(1050, 680)
 
-        # верхняя строка: выбор машины и пользователь
+        # верхняя панель
         self.car_box = ComboBox([str(car) for car in self.cars])
         self.car_box.setMinimumWidth(260)
         logout_button = Button("Выйти")
@@ -232,7 +228,7 @@ class MainWindow(QMainWindow):
 
         self.summary = SummaryBox()
 
-        # строка с поиском и кнопками
+        # поиск и кнопки
         self.search_edit = LineEdit("Поиск по описанию")
         self.search_edit.setFixedWidth(220)
         self.type_box = ComboBox(["Все записи"] + RECORD_TYPES)
@@ -345,6 +341,5 @@ class MainWindow(QMainWindow):
             self.status.show_message("Запись удалена")
 
     def closeEvent(self, event):
-        # при закрытии окна отмечаем время выхода пользователя
         self.session.close()
         event.accept()

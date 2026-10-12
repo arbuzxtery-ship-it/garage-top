@@ -10,36 +10,31 @@ from utils import Utils
 
 
 class Button(QPushButton):
-
     def __init__(self, text):
         super().__init__(text)
         self.setCursor(Qt.PointingHandCursor)
 
 
 class AccentButton(Button):
-    """Синяя кнопка для главного действия"""
-
     def __init__(self, text):
         super().__init__(text)
         self.setObjectName("accent")
 
 
 class LineEdit(QLineEdit):
-
     def __init__(self, placeholder=""):
         super().__init__()
         self.setPlaceholderText(placeholder)
 
 
 class ComboBox(QComboBox):
-
     def __init__(self, items=None):
         super().__init__()
         if items:
             self.addItems(items)
         self.setFocusPolicy(Qt.StrongFocus)
 
-    # чтобы значение не менялось случайно при прокрутке окна колёсиком
+    # не менять значение колесиком мыши, если поле не выбрано
     def wheelEvent(self, event):
         if self.hasFocus():
             super().wheelEvent(event)
@@ -48,7 +43,6 @@ class ComboBox(QComboBox):
 
 
 class SpinBox(QDoubleSpinBox):
-
     def __init__(self, maximum, decimals=2, suffix=""):
         super().__init__()
         self.setRange(0, maximum)
@@ -66,7 +60,6 @@ class SpinBox(QDoubleSpinBox):
 
 
 class DateEdit(QDateEdit):
-
     def __init__(self):
         super().__init__()
         self.setCalendarPopup(True)
@@ -76,7 +69,7 @@ class DateEdit(QDateEdit):
 
 
 class TableItem(QTableWidgetItem):
-    """Ячейка, которая сортируется по числу, а не по тексту"""
+    """Чтобы числа и даты сортировались правильно, а не как строки"""
 
     def __init__(self, text, sort_value=None):
         super().__init__(text)
@@ -107,7 +100,7 @@ class RecordsTable(QTableWidget):
         header.setSortIndicator(0, Qt.DescendingOrder)
 
     def show_records(self, records):
-        # во время заполнения сортировку выключаем, иначе строки перемешаются
+        # на время заполнения отключаем сортировку
         self.setSortingEnabled(False)
         self.setRowCount(len(records))
         for row, record in enumerate(records):
@@ -168,7 +161,6 @@ class SummaryBox(QGroupBox):
 
 
 class StatusBar(QStatusBar):
-
     def __init__(self, text):
         super().__init__()
         self.addPermanentWidget(QLabel(text))
@@ -178,8 +170,6 @@ class StatusBar(QStatusBar):
 
 
 class MessageBox(QMessageBox):
-    """Окна сообщений с русскими кнопками"""
-
     @staticmethod
     def ask(parent, title, text):
         box = MessageBox(parent)

@@ -12,7 +12,6 @@ REPORT_FILE = Path(__file__).parent / "report.txt"
 
 
 class Application:
-
     def __init__(self):
         self.app = QApplication(sys.argv)
         Style.apply(self.app)
@@ -22,7 +21,7 @@ class Application:
         self.report = Report(REPORT_FILE)
         self.window = None
 
-        # отчёт записывается в файл, когда программа закрывается
+        # при выходе из программы сохраняем отчет
         self.app.aboutToQuit.connect(self.report.save)
 
     def login(self):
